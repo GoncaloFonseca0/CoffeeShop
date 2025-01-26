@@ -14,21 +14,29 @@
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="card p-4 shadow-lg" style="width: 400px;">
             <h3 class="text-center mb-4">Login</h3>
-            <form>
+            <!-- Formulário para login -->
+            <form method="POST" action="login.php" id="loginForm">
                 <div class="mb-3">
-                    <label for="email" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                    <label for="txtusername" class="form-label">User</label>
+                    <input type="email" class="form-control" id="txtusername" name="txtusername"
+                        placeholder="Enter your email" required>
                 </div>
                 <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                    <label for="txtpassworduser" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="txtpassworduser" name="txtpassworduser"
+                        placeholder="Enter your password" required>
                 </div>
+                <div id="feedback" class="text-center text-danger mb-3" style="display: none;"></div>
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary w-100">Login</button>
                 </div>
             </form>
         </div>
     </div>
+
+
+
 </body>
+<script src="login.js"></script>
 
 </html>

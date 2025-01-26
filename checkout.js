@@ -1,29 +1,24 @@
-// Function to load cart items on the checkout page
-function loadCheckout() {
-    const checkoutItems = document.getElementById('checkoutItems');
-    const checkoutTotal = document.getElementById('checkoutTotal');
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+document.addEventListener("DOMContentLoaded", () => {
+    const checkoutForm = document.getElementById("checkoutForm");
 
-    checkoutItems.innerHTML = '';
-    let total = 0;
+    checkoutForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        console.log("Form submitted!"); // Debugging point
+        
+        const data = {
+            fullName: document.getElementById("fullName").value,
+            email: document.getElementById("email").value,
+            address: document.getElementById("address").value,
+            city: document.getElementById("city").value,
+            zip: document.getElementById("zip").value,
+            country: document.getElementById("country").value,
+        };
 
-    cart.forEach((item) => {
-        total += item.price;
-        const li = document.createElement('li');
-        li.className = 'list-group-item';
-        li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-        checkoutItems.appendChild(li);
+        if (document.getElementById("saveInfo").checked) {
+            localStorage.setItem("userInfo", JSON.stringify(data));
+        }
+
+        alert("Order placed successfully!");
+        window.location.href = "order-confirmation.html"; // Redirect here
     });
-
-    checkoutTotal.textContent = total.toFixed(2);
-}
-
-// Function to finalize order
-function finalizeOrder() {
-    alert('Thank you for your order!');
-    localStorage.removeItem('cart');
-    window.location.href = 'index.html';
-}
-
-// Load cart data on page load
-document.addEventListener('DOMContentLoaded', loadCheckout);
+});

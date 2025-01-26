@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste</title>
+</head>
+
+<body>
+    <h1>Clientes</h1>
+    <table border="1" cellpadding="2" cellspacing="0">
+        <thead>
+            <tr>
+                <td>Id_cliente</td>
+                <td>Nome</td>
+                <td>Email</td>
+                <td>Telefone</td>
+                <td>Morada</td>
+                <td>Password</td>
+            </tr>
+        </thead>
+        <tbody id="tb"></tbody>
+    </table>
+    <hr>
+    <div id="tv"></div>
+    <hr>
+
+    <fieldset>
+        <legend>iNSERIR REGISTO</legend>
+        <form id="frm" name="frm" action="#" method="post">
+            <label>Nome</label>
+            <input type="text" id="Nome" name="Name"><br><br>
+            <label>Email</label>
+            <input type="text" id="Email" name="Email"><br><br>
+            <label>TELEPHONE</label>
+            <input type="number" id="TELEPHONE" name="TELEPHONE"><br><br>
+            <label>ADDRESS</label>
+            <input type="text" id="ADDRESS" name="ADDRESS"><br><br>
+            <label>Password</label>
+            <input type="text" id="Password" name="Password"><br><br>
+            <button TYPE="button" id="btinsert">iNSERIR</button>
+        </form>
+    </fieldset>
+    <script type="text/javascript">
+        window.onload = function () {
+            carrega();
+            const tv = document.getElementById("tv");
+            const frm = document.getElementById("frm");
+            const btinsert = document.getElementById("btinsert");
+
+            btinsert.onclick = function (evt) {
+                // alert(evt.target.id);
+                formdata = new FormData(frm);
+                formdata.append("xpto", 13);
+                for (const [k, v] of formdata.entries()) {
+                    console.log(`${k}->${v}`);
+
+
+                }
+
+                fetch("insertClients.php", {
+
+                    method: 'post',
+                    body: formdata
+                }).then(
+                    response => response.json()
+                ).then(json => {
+                    tv.innerHTML = json.msg;
+                    if (json.msg == true) carrega();
+                    document.getElementById("Name").value = "";
+                    document.getElementById("Email").value = "";
+
+
+                }
+                ).catch(erro => { tv.innerHTML = erro });
+            };
+        };
+
+        function carrega() {
+            fetch("getclients.php")
+                .then(response => response.json())
+                .then(json => {
+                    console.log(json);
+                    // Mapeando os dados corretamente
+                    const dados = json.map(v => {
+                        return `
+                            <tr>
+                                <td><a href='editClient.html?id_client=${v.id_client}'>${v.id_client}</a></td>
+                                <td>${v.Name}</td>
+                                <td>${v.Email}</td>
+                                <td>${v.TELEPHONE}</td>
+                                <td>${v.ADDRESS}</td>
+                                <td>${v.Password}</td>
+                               <td>${btdel(v.id_client)}</td>
+                               
+                            </tr>`;
+                    });
+
+                    // Inserindo os dados na tabela
+                    document.getElementById("tb").innerHTML = dados.join("");
+                })
+                .catch(error => {
+                    document.getElementById("tv").innerHTML = "erro do feetch";
+                });
+        }
+
+        function btdel(id) {
+            return `
+        <button id="btn-${id}" type="button" onclick="del(${id})">
+            Delete
+        </button>
+    `;
+        }
+        function del(id) {
+
+            formdata = new FormData();
+            formdata.append("id_client", id);
+            let ok = confirm("Quer mesmo apagar o registo?");
+            if (!ok) return false;
+            fetch("deleteClient.php", {
+                method: 'post',
+                body: formdata
+
+            }).then(response => response.json()).then(json => {
+                document.getElementById("tv").innerHTML = json.msg;
+                if (json.msg) {
+                    carrega();
+
+                }
+            }).catch();
+        }
+
+    </script>
+</body>
+
+</html>

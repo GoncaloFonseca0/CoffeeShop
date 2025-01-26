@@ -11,14 +11,40 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&amp;display=swap">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="cart.css">
+    <script src="getproduct.js" defer></script>
 </head>
 
+
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="cartItems" class="list-group">
+                    <!-- Os itens do carrinho serão adicionados dinamicamente aqui -->
+                </ul>
+                <hr>
+                <p><strong>Total Items:</strong> <span id="cartCount">0</span></p>
+                <p><strong>Total Price:</strong> $<span id="cartTotal">0.00</span></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="proceedToCheckout()">Proceed to Checkout</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <body style="background:linear-gradient(rgba(47, 23, 15, 0.65), rgba(47, 23, 15, 0.65)), url('assets/img/bg.jpg');">
-    <!-- Buttons: Login and Cart -->
+
     <div style="position: fixed; top: 20px; right: 20px; display: flex; gap: 10px;">
         <a class="btn btn-outline-light" href="login.html" role="button">Login</a>
         <button class="btn btn-outline-light" onclick="toggleCart()">Cart</button>
     </div>
+
 
     <h1 class="text-center text-white d-none d-lg-block site-heading">
         <span class="text-primary site-heading-upper mb-3">Fresh coffee, organically sourced</span>
@@ -43,17 +69,17 @@
             <div class="product-item">
                 <div class="d-flex product-item-title">
                     <div class="d-flex me-auto bg-faded p-5 rounded">
-                        <h2 class="section-heading mb-0"><span class="section-heading-upper">Blended to
-                                Perfection</span><span class="section-heading-lower">Coffees &amp; Teas</span></h2>
+                        <div id="soft" class="products-list"></div>
+                        <h2 class="section-heading mb-0"><span class="section-heading-upper"></span><span
+                                class="section-heading-lower"></span></h2>
                     </div>
                 </div><img class="img-fluid d-flex mx-auto product-item-img mb-3 mb-lg-0 rounded"
                     src="assets/img/products-01.jpg">
                 <div class="bg-faded p-5 rounded">
-                    <p class="mb-0">We take pride in our work, and it shows. Every time you order a beverage from us, we
-                        guarantee that it will be an experience worth having. Whether it's our world famous Venezuelan
-                        Cappuccino, a refreshing iced herbal tea, or something as simple as a cup of specialty-sourced
-                        black coffee, you will be coming back for more.</p>
-                    <button class="btn btn-primary" onclick="addToCart('Venezuelan Cappuccino', 5)">Add to Cart</button>
+                    <p class="mb-0" id="descr1" class="description-list"></p>
+                    <p id="price1"></p>
+                    <button class="btn btn-primary" onclick="addToCart('soft')">Add to Cart</button>
+
                 </div>
             </div>
         </div>
@@ -63,18 +89,18 @@
             <div class="product-item">
                 <div class="d-flex product-item-title">
                     <div class="d-flex me-auto bg-faded p-5 rounded">
-                        <h2 class="section-heading mb-0"><span class="section-heading-upper">Smooth &amp;
-                                Creamy</span><span class="section-heading-lower">Caramel Macchiato</span></h2>
+                        <div id="hard" class="products-list"></div>
+                        <h2 class="section-heading mb-0"><span class="section-heading-upper">
+
+                            </span><span class="section-heading-lower"></span></h2>
                     </div>
                 </div>
                 <img class="img-fluid d-flex mx-auto product-item-img mb-3 mb-lg-0 rounded"
                     src="assets/img/products-03.jpg" alt="Caramel Macchiato">
                 <div class="bg-faded p-5 rounded">
-                    <p class="mb-0">Indulge in the smooth, creamy goodness of our Caramel Macchiato. Made with our
-                        signature espresso, steamed milk, and topped with rich caramel drizzle, it's the perfect treat
-                        to
-                        brighten your day.</p>
-                    <button class="btn btn-primary" onclick="addToCart('Caramel Macchiato', 6)">Add to Cart</button>
+                    <p class="mb-0" id="descr2"></p>
+                    <p id="price2"></p>
+                    <button class="btn btn-primary" onclick="addToCart('hard')">Add to Cart</button>
                 </div>
             </div>
         </div>
@@ -84,38 +110,25 @@
             <div class="product-item">
                 <div class="d-flex product-item-title">
                     <div class="d-flex ms-auto bg-faded p-5 rounded">
-                        <h2 class="section-heading mb-0"><span class="section-heading-upper">Delicious Treats, Good
-                                Eats</span><span class="section-heading-lower">Bakery &amp; Kitchen</span></h2>
+                        <div id="medium" class="products-list"></div>
+                        <h2 class="section-heading mb-0"><span class="section-heading-upper"></span><span
+                                class="section-heading-lower" id="title"></span></h2>
                     </div>
                 </div><img class="img-fluid d-flex mx-auto product-item-img mb-3 mb-lg-0 rounded"
                     src="assets/img/products-02.jpg">
                 <div class="bg-faded p-5 rounded">
-                    <p class="mb-0">Our seasonal menu features delicious snacks, baked goods, and even full meals
-                        perfect for breakfast or lunchtime. We source our ingredients from local, organic farms whenever
-                        possible, alongside premium vendors for specialty goods.</p>
-                    <button class="btn btn-primary" onclick="addToCart('Bakery Treats', 7)">Add to Cart</button>
+                    <p class="mb-0" id="descr3"></p>
+                    <p id="price3"></p>
+                    <button class="btn btn-primary" onclick="addToCart('medium')">Add to Cart</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Cart Modal -->
-    <div id="cartModal">
-        <div class="cart-header">
-            <h5>Cart</h5>
-            <button class="btn-close btn-close-white" onclick="toggleCart()"></button>
-        </div>
-        <div class="cart-body">
-            <ul id="cartItems" class="list-group">
-                <!-- Cart items will appear here -->
-            </ul>
-        </div>
-        <div class="cart-footer">
-            <p>Total Items: <span id="cartCount">0</span></p>
-            <p>Total Price: $<span id="cartTotal">0.00</span></p>
-            <button class="btn btn-success" onclick="proceedToCheckout()">Proceed to Checkout</button>
-        </div>
-    </div>
+
+
+
+
 
     <footer class="text-center footer text-faded py-4">
         <div class="container">
@@ -123,6 +136,7 @@
         </div>
 
         <script src="cart.js"></script>
+        <script src="getproduct.js" defer></script>
     </footer>
 </body>
 
